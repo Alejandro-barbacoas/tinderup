@@ -8,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import ProfileCard from '../components/ProfileCard';
-import { profiles } from '../data/profiles';
+import { profiles } from './data/profiles';
 
 export default function Index() {
   const [currentIndex, setCurrentIndex] = useState(0);
