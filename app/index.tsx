@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Modal } from 'react-native';
 import { useState } from 'react';
 import Animated, { 
   useAnimatedStyle, 
@@ -8,18 +8,28 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import ProfileCard from '../components/ProfileCard';
-import { profiles } from './data/profiles';
+import CreateProfile from './screens/CreateProfile';
+import { profiles as initialProfiles, Profile } from './data/profiles';
 
 export default function Index() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [passCount, setPassCount] = useState(0);
+  const [profiles, setProfiles] = useState<Profile[]>(initialProfiles);
+  const [showCreateProfile, setShowCreateProfile] = useState(false);
   
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const rotate = useSharedValue(0);
 
   const currentProfile = profiles[currentIndex];
+
+  // Función para agregar nuevo perfil
+  const addNewProfile = (newProfile: Profile) => {
+    setProfiles(prev => [...prev, newProfile]);
+    setShowCreateProfile(false);
+    Alert.alert('Perfil creado', 'Tu perfil se agregó correctamente');
+  };
 
   // Función para manejar like
   const handleLike = () => {
@@ -104,12 +114,20 @@ export default function Index() {
           <Text style={styles.statNumber}>{likeCount}</Text>
           <Text style={styles.statLabel}>Likes</Text>
         </View>
-        <Text style={styles.title}>TinderHUB</Text>
+        <Text style={styles.title}>TinderUp</Text>
         <View style={styles.statContainer}>
           <Text style={styles.statNumber}>{passCount}</Text>
           <Text style={styles.statLabel}>Pass</Text>
         </View>
       </View>
+
+      {/* Botón para crear perfil */}
+      <TouchableOpacity 
+        style={styles.createButton}
+        onPress={() => setShowCreateProfile(true)}
+      >
+        <Text style={styles.createButtonText}>+ Crear Perfil</Text>
+      </TouchableOpacity>
 
       {/* Tarjeta con gesture */}
       <View style={styles.cardContainer}>
@@ -128,6 +146,18 @@ export default function Index() {
       <Text style={styles.counter}>
         {currentIndex + 1} / {profiles.length}
       </Text>
+
+      {/* Modal de crear perfil */}
+      <Modal
+        visible={showCreateProfile}
+        animationType="slide"
+        onRequestClose={() => setShowCreateProfile(false)}
+      >
+        <CreateProfile
+          onSave={addNewProfile}
+          onCancel={() => setShowCreateProfile(false)}
+        />
+      </Modal>
     </View>
   );
 }
@@ -183,6 +213,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ff1493',
     marginBottom: 30,
+  },
+  createButton: {
+    backgroundColor: '#1a1a1a',
+    borderWidth: 2,
+    borderColor: '#ff1493',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    marginVertical: 10,
+  },
+  createButtonText: {
+    color: '#ff1493',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   endText: {
     fontSize: 24,
