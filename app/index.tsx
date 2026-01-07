@@ -25,7 +25,7 @@ export default function Index() {
   const handleLike = () => {
     setLikeCount(prev => prev + 1);
     nextProfile();
-    Alert.alert('LIKE!', `Te gustó ${currentProfile.name}`);
+    Alert.alert('LIKE', `Te gustó ${currentProfile.name}`);
   };
 
   // Función para manejar pass
@@ -42,7 +42,7 @@ export default function Index() {
       translateY.value = 0;
       rotate.value = 0;
     } else {
-      Alert.alert('Viste todo lo veable');
+      Alert.alert('Fin', 'Ya viste todos los perfiles');
     }
   };
 
@@ -85,7 +85,7 @@ export default function Index() {
   if (currentIndex >= profiles.length) {
     return (
       <View style={styles.container}>
-        <Text style={styles.endText}>¡Ya viste todos los perfiles! 🎉</Text>
+        <Text style={styles.endText}>Ya viste todos los perfiles</Text>
         <TouchableOpacity 
           style={styles.resetButton}
           onPress={() => setCurrentIndex(0)}
@@ -104,10 +104,10 @@ export default function Index() {
           <Text style={styles.statNumber}>{likeCount}</Text>
           <Text style={styles.statLabel}>Likes</Text>
         </View>
-        <Text style={styles.title}>TinderUp</Text>
+        <Text style={styles.title}>TinderHUB</Text>
         <View style={styles.statContainer}>
           <Text style={styles.statNumber}>{passCount}</Text>
-          <Text style={styles.statLabel}>Pasa</Text>
+          <Text style={styles.statLabel}>Pass</Text>
         </View>
       </View>
 
@@ -115,26 +115,13 @@ export default function Index() {
       <View style={styles.cardContainer}>
         <GestureDetector gesture={panGesture}>
           <Animated.View style={[styles.cardWrapper, animatedStyle]}>
-            <ProfileCard profile={currentProfile} />
+            <ProfileCard 
+              profile={currentProfile}
+              onLike={handleLike}
+              onPass={handlePass}
+            />
           </Animated.View>
         </GestureDetector>
-      </View>
-
-      {/* Botones de acción */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={[styles.button, styles.passButton]}
-          onPress={handlePass}
-        >
-          <Text style={styles.buttonText}>✕</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={[styles.button, styles.likeButton]}
-          onPress={handleLike}
-        >
-          <Text style={styles.buttonText}>♥</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Contador de perfiles */}
@@ -148,7 +135,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0a0a0a',
     alignItems: 'center',
   },
   header: {
@@ -159,11 +146,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 60,
     paddingBottom: 20,
+    backgroundColor: '#0a0a0a',
+    borderBottomWidth: 2,
+    borderBottomColor: '#ff1493',
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FF6B6B',
+    color: '#ff1493',
+    textShadowColor: '#ff1493',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
   },
   statContainer: {
     alignItems: 'center',
@@ -171,73 +164,44 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#ffffff',
   },
   statLabel: {
     fontSize: 12,
-    color: '#666',
+    color: '#ff1493',
   },
   cardContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 40,
   },
   cardWrapper: {
     position: 'absolute',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 40,
-    paddingVertical: 30,
-  },
-  button: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  passButton: {
-    backgroundColor: '#FF6B6B',
-  },
-  likeButton: {
-    backgroundColor: '#4ECDC4',
-  },
-  buttonText: {
-    fontSize: 32,
-    color: 'white',
-    fontWeight: 'bold',
-  },
   counter: {
     fontSize: 16,
-    color: '#666',
-    marginBottom: 20,
+    color: '#ff1493',
+    marginBottom: 30,
   },
   endText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#ffffff',
     marginTop: 100,
     textAlign: 'center',
   },
   resetButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: '#1a1a1a',
+    borderWidth: 2,
+    borderColor: '#ff1493',
     paddingHorizontal: 30,
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 0,
     marginTop: 20,
   },
   resetButtonText: {
-    color: 'white',
+    color: '#ff1493',
     fontSize: 18,
     fontWeight: 'bold',
   },
